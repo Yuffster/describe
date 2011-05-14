@@ -1,0 +1,13 @@
+{
+	"name":"describe",
+	"description":"An extremely lightweight method for running tests.",
+	"version":"0.8.0",
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/yuffster/npm-describe"
+	},
+	"dependencies": {
+		"string-color": ">= 0.8.0"
+	},
+	"main": "describe.js"
+}
