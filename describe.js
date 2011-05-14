@@ -1,29 +1,33 @@
 require("string-color");
 describe = function(series, obj) {
 
-	sys.puts(series.toUpperCase().color('yellow')+":");
+	console.log(series.toUpperCase().color('yellow')+":");
 
 	var passed = 0, failed = 0, total = 0;
 
-	Object.each(obj, function(test, desc) {
+	for (var k in obj) {
+
+		if (!obj.hasOwnProperty(k)) continue;
+
+		var test = obj[k], desc = k;
 
 		total++;
 		try {
 			test();
 		} catch (e) {
 			failed++;
-			sys.puts("\t"+desc.color('red'));
-			sys.puts("\t\t====> "+e.stack);
+			console.log("\t"+desc.color('red'));
+			console.log("\t\t====> "+e.stack);
 			return;
 		}
 
 		passed++;
 
-		sys.puts("\t"+desc.color('green'));
+		console.log("\t"+desc.color('green'));
 
-	});
+	};
 
-	sys.puts(
+	console.log(
 		"PASSED".color('green')+": "+passed+
 		" / "+total
 	);
