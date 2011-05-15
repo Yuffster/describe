@@ -18,7 +18,7 @@ describe = function(series, obj) {
 			failed++;
 			console.log("\t"+desc.color('red'));
 			console.log("\t\t====> "+e.stack);
-			return;
+			continue;
 		}
 
 		passed++;
