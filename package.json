@@ -9,5 +9,10 @@
 	"dependencies": {
 		"string-color": ">= 0.8.0"
 	},
+	"author": {
+		"name": "Michelle Steigerwalt",
+		"url":  "http://msteigerwalt.com"
+	},
+	"homepage": "http://github.com/yuffster/npm-describe",
 	"main": "describe.js"
 }
