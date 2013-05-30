@@ -84,11 +84,11 @@ call this.
 	{ 
 		passed: 1,
 		total: 2,
-		tests: {
+		results: {
 			'sample test group': {
 				passed: 1,
 				total: 2,
-				tests: {
+				results: {
 					'this test passed because its error is null': null,
 					'this test failed because there's an error': [Error]
 				}

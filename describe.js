@@ -132,7 +132,7 @@
 
 	Group.prototype.execute = function(callback) {
 
-		var pending = 0, results = {}, my = this;
+		var pending = 0, results = {}, my = this, total = 0, passed = 0;
 
 		for (var name in this.tests) {
 			if (this.tests.hasOwnProperty(name)) pending++;
@@ -141,6 +141,7 @@
 		for (name in this.tests) {
 			if (this.tests.hasOwnProperty(name)) (function(name){
 				var returned = false;
+				total++;
 				runTest(my.tests[name], function(error) {
 					if (returned) {
 						results[name] = new Error("Duplicate callback");
@@ -149,24 +150,34 @@
 					returned = true;
 					pending--;
 					results[name] = error;
-					if (pending===0) callback(results);
+					if (error === null) passed++;
+					if (pending===0) {
+						callback({
+							total: total,
+							passed: passed,
+							results: results
+						});
+					}
 				}, my.options);
 			}(name));
 		}
 
 	};
 
-	var results = {}, pendingGroups = 0, resultCallbacks = [];
+	var results = {}, pendingGroups = 0, resultCallbacks = [],
+	    total = 0, passed = 0;
 
 	function describe(name, tests, config) {
 		pendingGroups++;
 		new Group(name, tests, config).execute(function(data) {
 			results[name] = data;
+			total  += data.total;
+			passed += data.passed;
 			pendingGroups--;
 			if (pendingGroups===0) {
 				var next = resultCallbacks.shift();
 				while (next) {
-					next(results);
+					next({total: total, passed: passed, results: results});
 					next = resultCallbacks.shift();
 				}
 			}
