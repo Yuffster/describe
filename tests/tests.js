@@ -124,9 +124,7 @@ describe("promise callback style", {
 			bowties = 'cool';
 		},
 		beforeEach: function() {
-			arr[arr.length] = 1;
-			arr[arr.length] = 2;
-			arr[arr.length] = 3;
+			arr = arr.concat(1,2,3);
 		},
 		afterEach: function() {
 			arr = [];
@@ -139,7 +137,7 @@ describe("promise callback style", {
 		},
 		'arrays have three things [beforeEach]': function() {
 			this.expect(arr.length, 3);
-			arr[arr.length] = 5;
+			arr.push(5);
 		},
 		'arrays still have three things [afterEach]': function() {
 			this.expect(arr.length, 3);

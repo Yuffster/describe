@@ -139,7 +139,7 @@ test hooks.
 				bowties = 'cool';
 			},
 			beforeEach: function() {
-				arr = [1,2,3];
+				arr = arr.concat(1,2,3);
 			},
 			afterEach: function() {
 				arr = [];
@@ -152,7 +152,7 @@ test hooks.
 			},
 			'arrays have three things': function() {
 				this.expect(arr.length, 3);
-				arr[arr.length] = 5;
+				arr.push(5);
 			},
 			'arrays still have three things': function() {
 				this.expect(arr.length, 3);
