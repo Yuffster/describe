@@ -46,10 +46,13 @@ this.expect( *subject*, *expected* )
 
 ### Asynchronous Assertions
 
+By passing this.expect as the callback parameter to an asynchronous function,
+describe will know to wait for the result of the operation before checking to
+see if the result matches what was expected.
+
 this.expect( *expected* )
 
-
-#### Example: Basic Callbacks
+#### Basic Callbacks
 
 	function addNumbersAsync(a, b, callback) {
 		callback(a+b);
@@ -61,7 +64,7 @@ this.expect( *expected* )
 		}
 	});
 
-#### Example: Node.js-style (e, data) Callbacks
+#### Node.js-style (e, data) Callbacks
 
 	function addNumbersAsync(a, b, callback) {
 		callback(null, a+b);
@@ -72,6 +75,26 @@ this.expect( *expected* )
 			addNumbersAsync(2, 2, this.expect(4));
 		}
 	}, { callbackMode: 'node' });
+
+#### Promises-style Callbacks
+
+	function addThingsPromise() {
+		var n = 0;
+		for (var i in arguments) n+=arguments[i];
+		return {
+			then: function(success, failure) {
+				success(n);
+			}
+		};
+	}
+
+	describe("promise callback style", {
+		'promises-style addition': function() {
+			this.expect(addThingsPromise(2, 2), 4);
+		}
+	}, {
+		callbackMode: 'promises'
+	});
 
 ### describe.getResults
 
