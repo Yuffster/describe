@@ -12,8 +12,8 @@ describe( *groupName*, *tests*[, *options*] );
 #### Arguments
 
 - *groupName* (string): A human-readable description of the test group.
-- *tests* (object): An object made up of human-readable test descriptions as keys and
-functions to run as tests.  Tests functions will be given access to 
+- *tests* (object): An object made up of human-readable test descriptions as 
+keys and functions to run as tests.  Tests functions will be given access to
 `this.expect`.
 - *options*: Configuration options.  Possible values:
 	- timeout (int): The max amount of time to wait for a test to run before
@@ -72,3 +72,30 @@ this.expect( *expected* )
 			addNumbersAsync(2, 2, this.expect(4));
 		}
 	}, { callbackMode: 'node' });
+
+### describe.getResults
+
+An asynchronous method.  Calls back with the results of all tests described up
+to that point.  You should probably wait until you're done defining tests to
+call this.
+
+#### Example Results
+
+	{ 
+		passed: 1,
+		total: 2,
+		tests: {
+			'sample test group': {
+				passed: 1,
+				total: 2,
+				tests: {
+					'this test passed because its error is null': null,
+					'this test failed because there's an error': [Error]
+				}
+			}
+		}
+	}
+
+### describe.logResults
+
+Gets the results and outputs them either to the DOM or the console.
