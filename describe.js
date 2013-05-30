@@ -77,8 +77,6 @@
 		try {
 			fun.call({
 				expect: function(a,b) {
-					done = true;
-					clearTimeout(timer);
 					return expect(a,b,callback,options);
 				}
 			});
