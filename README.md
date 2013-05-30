@@ -7,7 +7,7 @@ code within JavaScript projects.
 
 ### describe
 
-describe(*groupName*, *tests*[, *options*]);
+`describe(groupName, *tests*[, *options*]);`
 
 ### Arguments
 
