@@ -122,3 +122,41 @@ call this.
 ### describe.logResults
 
 Gets the results and outputs them either to the DOM or the console.
+
+### Test Hooks
+
+Each test group supports beforeEach, afterEach, beforeAll, and afterAll as
+test hooks.
+
+#### Example
+
+	(function() {
+
+		var arr = [], bowties;
+
+		describe('array stuff', {
+			beforeAll: function() {
+				bowties = 'cool';
+			},
+			beforeEach: function() {
+				arr = [1,2,3];
+			},
+			afterEach: function() {
+				arr = [];
+			},
+			afterAll: function() {
+				tests = null;
+			},
+			'bowties are cool': function() {
+				this.expect(bowties, 'cool');
+			},
+			'arrays have three things': function() {
+				this.expect(arr.length, 3);
+				arr[arr.length] = 5;
+			},
+			'arrays still have three things': function() {
+				this.expect(arr.length, 3);
+			}
+		});
+
+	}());

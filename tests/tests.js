@@ -34,16 +34,16 @@ function failedPromise() {
 	};
 }
 
-function promiseTimout() {
+function throwError() {
+	throw new Error("expected error");
+}
+
+function promiseTimeout() {
 	return {
 		thing: function(success, failure) {
 			setTimeout(success, 1000);
 		}
 	}
-}
-
-function asyncNodeError(callback) {
-	callback('test error', null);
 }
 
 function asyncNodeData(callback) {
@@ -114,3 +114,42 @@ describe("promise callback style", {
 }, {
 	callbackMode: 'promises'
 });
+
+(function() {
+
+	var arr = [], bowties;
+
+	describe('test hooks', {
+		beforeAll: function() {
+			bowties = 'cool';
+		},
+		beforeEach: function() {
+			arr[arr.length] = 1;
+			arr[arr.length] = 2;
+			arr[arr.length] = 3;
+		},
+		afterEach: function() {
+			arr = [];
+		},
+		afterAll: function() {
+			bowties = null;
+		},
+		'bowties are cool [beforeAll]': function() {
+			this.expect(bowties, 'cool');
+		},
+		'arrays have three things [beforeEach]': function() {
+			this.expect(arr.length, 3);
+			arr[arr.length] = 5;
+		},
+		'arrays still have three things [afterEach]': function() {
+			this.expect(arr.length, 3);
+		}
+	});
+
+	describe('final test hook test', {
+		"bowties aren't cool [afterAll]": function() {
+			this.expect(bowties, null);
+		}
+	});
+
+}());

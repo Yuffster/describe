@@ -105,14 +105,19 @@
 	Group.prototype.execute = function(callback) {
 
 		var pending = 0, results = {}, my = this, errors = {},
-		    total   = 0, passed = 0;
+		    total   = 0, passed = 0,
+		    hooks   = {beforeEach:0, beforeAll:0, afterEach:0, afterAll:0};
 
 		for (var name in this.tests) {
-			if (this.tests.hasOwnProperty(name)) pending++;
+			if (hooks[name]!==undefined) hooks[name] = this.tests[name];
+			else if (this.tests.hasOwnProperty(name)) pending++;
 		}
 
+		if (hooks.beforeAll) hooks.beforeAll();
 		for (name in this.tests) {
+			if (hooks[name]!==undefined) continue;
 			if (this.tests.hasOwnProperty(name)) (function(name){
+				if (hooks.beforeEach) hooks.beforeEach();
 				var returned = false;
 				total++;
 				runTest(my.tests[name], function(error) {
@@ -137,7 +142,9 @@
 					}
 				}, my.options);
 			}(name));
+			if (hooks.afterEach) hooks.afterEach();
 		}
+		if (hooks.afterAll) hooks.afterAll();
 
 	};
 
