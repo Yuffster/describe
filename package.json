@@ -4,7 +4,7 @@
 	"version":"0.9.0",
 	"repository": {
 		"type": "git",
-		"url": "http://github.com/yuffster/npm-describe"
+		"url": "http://github.com/yuffster/describe"
 	},
 	"dependencies": {
 		"string-color": ">= 0.8.0"
@@ -13,6 +13,6 @@
 		"name": "Michelle Steigerwalt",
 		"url":  "http://msteigerwalt.com"
 	},
-	"homepage": "http://github.com/yuffster/npm-describe",
+	"homepage": "http://github.com/yuffster/describe",
 	"main": "describe.js"
 }
