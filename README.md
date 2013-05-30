@@ -7,9 +7,9 @@ code within JavaScript projects.
 
 ### describe
 
-`describe(groupName, *tests*[, *options*]);`
+describe( *groupName*, *tests*[, *options*] );
 
-### Arguments
+#### Arguments
 
 - *groupName* (string): A human-readable description of the test group.
 - *tests* (object): An object made up of human-readable test descriptions as keys and
@@ -21,11 +21,20 @@ timing out.
 	- callbackMode (string): if set to 'node', this.expect will treat the first
 argument to the callback as an error and the second argument as the result.
 
-### describe.config(*key*, *value*)
+### describe.config
+
+describe.config( *key*, *value* )
 
 Sets the global configuration for tests.
 
-### Synchronous Assertions: this.expect(*subject*, *expected*)
+### Synchronous Assertions
+
+this.expect( *subject*, *expected* )
+
+#### Arguments
+
+- *subject* (mixed): the actual result.
+- *expected* (mixed): the expected result.
 
 #### Example
 
@@ -35,7 +44,9 @@ Sets the global configuration for tests.
 		}
 	});
 
-### Asynchronous Assertions: this.expect(*expected*)
+### Asynchronous Assertions
+
+this.expect( *expected* )
 
 
 #### Example: Basic Callbacks
