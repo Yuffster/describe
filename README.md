@@ -11,14 +11,14 @@ describe(*groupName*, *tests*[, *options*]);
 
 ### Arguments
 
-* *groupName* (string): A human-readable description of the test group.
-* *tests* (object): An object made up of human-readable test descriptions as keys and
+- *groupName* (string): A human-readable description of the test group.
+- *tests* (object): An object made up of human-readable test descriptions as keys and
 functions to run as tests.  Tests functions will be given access to 
 `this.expect`.
-* *options*: Configuration options.  Possible values:
-	* timeout (int): The max amount of time to wait for a test to run before
+- *options*: Configuration options.  Possible values:
+	- timeout (int): The max amount of time to wait for a test to run before
 timing out.
-	* callbackMode (string): if set to 'node', this.expect will treat the first
+	- callbackMode (string): if set to 'node', this.expect will treat the first
 argument to the callback as an error and the second argument as the result.
 
 ### describe.config(*key*, *value*)
