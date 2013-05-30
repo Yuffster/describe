@@ -74,9 +74,10 @@
 			clearTimeout(timer);
 		}
 
+		var error = new Error("Test timeout after "+options.timeout+"ms");
 		timer = setTimeout(function() {
 			if (done) return;
-			callback(new Error("Test timeout after "+options.timeout+"ms"));
+			callback(error);
 			done = true;
 		}, options.timeout);
 
