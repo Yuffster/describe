@@ -21,62 +21,20 @@
 
 	function outputConsole(data, options) {
 
-		var color, test, lines, errors = {},
-		    passed = 0, tests = 0, totalTests = 0, totalPassed = 0,
-		    output = [];
-
-		options = options || {};
-
-		function log(mess) {
-			output[output.length] = mess;
-		}
-
 		if (!String.prototype.color) require('string-color');
-		for (var groupName in data) {
-			lines = [], passed = 0, tests = 0;
-			for (test in data[groupName]) {
-				tests++;
-				if (data[groupName][test]===null) {
-					color = 'green';
-					passed++;
-				} else {
-					color = 'red';
-					errors[groupName] = errors[groupName] || {};
-					errors[groupName][test] = data[groupName][test];
-				}
-				lines[lines.length] = ('\t'+test).color(color);
-			}
-			color = (tests==passed) ? 'green' : 'red';
-			if (options.verbose) {
-				alert("HOAI");
-				log((groupName+' ('+passed+'/'+tests+')').color(color));
-				log(lines.join('\n'));
-			}
-			totalPassed += passed;
-			totalTests += tests;
+
+		for (var k in data.errors) {
+			console.log(k.color('red'));
+			console.log(data.errors[k].stack || data.errors[k]);
 		}
-		if (totalPassed===totalTests) {
-			result = 'passed';
-			color  = 'green';
-		} else {
-			color  = 'red';
-			result = 'failed';
-		}
-		for (var groupName in errors) {
-			for (var test in errors[groupName]) {
-				log((groupName+"#"+test).color('red'));
-				log(errors[groupName][test].stack);
-			}
-		}
-		log(
-			("Tests "+result+": "+totalPassed+'/'+totalTests).color(color)
-		);
-		if (typeof process != "undefined") {
-			console.log(output.join('\n'));
-			process.exit(totalTests-totalPassed);
-		} else {
-			return output.join('\n');
-		}
+
+		var output = "";
+		if (data.passed!==data.total) output += "FAILED".color('red');
+		else output += "PASSED".color('green');
+		output += ": "+data.passed+"/"+data.total;
+
+		console.log(output);
+
 	}
 
 	function expect(subject, expected, callback, options) {
@@ -126,13 +84,15 @@
 
 	function Group(name, tests, config) {
 		this.options = options;
+		this.name = name;
 		for (var k in config) this.options[k] = config[k];
 		this.tests = tests;
 	}
 
 	Group.prototype.execute = function(callback) {
 
-		var pending = 0, results = {}, my = this, total = 0, passed = 0;
+		var pending = 0, results = {}, my = this, errors = {},
+		    total   = 0, passed = 0;
 
 		for (var name in this.tests) {
 			if (this.tests.hasOwnProperty(name)) pending++;
@@ -151,11 +111,15 @@
 					pending--;
 					results[name] = error;
 					if (error === null) passed++;
+					else {
+						errors[name] = error;
+					}
 					if (pending===0) {
 						callback({
 							total: total,
 							passed: passed,
-							results: results
+							results: results,
+							errors: errors
 						});
 					}
 				}, my.options);
@@ -164,7 +128,7 @@
 
 	};
 
-	var results = {}, pendingGroups = 0, resultCallbacks = [],
+	var results = {}, pendingGroups = 0, resultCallbacks = [], errors = {},
 	    total = 0, passed = 0;
 
 	function describe(name, tests, config) {
@@ -173,11 +137,16 @@
 			results[name] = data;
 			total  += data.total;
 			passed += data.passed;
+			for (var k in data.errors) errors[name+'#'+k] = data.errors[k];
 			pendingGroups--;
 			if (pendingGroups===0) {
+				result = {
+					total: total, passed: passed, results: results, 
+					errors: errors
+				};
 				var next = resultCallbacks.shift();
 				while (next) {
-					next({total: total, passed: passed, results: results});
+					next(result);
 					next = resultCallbacks.shift();
 				}
 			}
