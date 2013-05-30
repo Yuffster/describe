@@ -14,7 +14,8 @@
 
 	function outputDOM(data) {
 		String.prototype.color = function(color) {
-			return '<span style="color:'+color+';font-weight:bold;">'+this+"</span>";
+			return '<span style="color:'+color+
+			       ';font-weight:bold;">'+this+"</span>";
 		};
 		document.body.innerHTML = "<pre>"+getOutput(data)+"</pre>";
 	}
@@ -47,6 +48,11 @@
 	}
 
 	function expect(subject, expected, callback, options) {
+		if (subject && subject.then && options.callbackMode == "promises") {
+			subject.then(function(data) {
+				expect(data, expected, callback, options);
+			}, callback);
+		}
 		if (expected===undefined) {
 			expected = subject;
 			subject  = null;
@@ -58,7 +64,7 @@
 				}
 				expect(response, expected, callback);
 			};
-		} else {
+		}  else {
 			if (subject==expected) callback(null);
 			else callback(new Error("Expected "+expected+" but got "+subject));
 		}
@@ -94,7 +100,6 @@
 
 	function Group(name, tests, config) {
 		this.options = options;
-		this.name = name;
 		for (var k in config) this.options[k] = config[k];
 		this.tests = tests;
 	}
@@ -166,19 +171,19 @@
 	describe.config = function(k,v) {
 		if (v) options[k] = v;
 		return options[k] || false;
-	}
+	};
 
 	describe.getResults = function(cb) {
 		if (pendingGroups===0) cb(results);
 		else resultCallbacks[resultCallbacks.length] = cb;
-	}
+	};
 
 	describe.logResults = function() {
 		describe.getResults(function(data) {
 			if (typeof window !== "undefined") outputDOM(data, options);
 			else outputConsole(data, options);
 		});
-	}
+	};
 
 	if (isModule) module.exports = describe;
 	else scope.describe = describe;

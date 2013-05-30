@@ -16,6 +16,32 @@ function addThingsAsync() {
 	} callback(n);
 }
 
+function addThingsPromise() {
+	var n = 0;
+	for (var i in arguments) n+=arguments[i];
+	return {
+		then: function(success, failure) {
+			success(n);
+		}
+	};
+}
+
+function failedPromise() {
+	return {
+		then: function(success, failure) {
+			failure(new Error("expected error"));
+		}
+	};
+}
+
+function promiseTimout() {
+	return {
+		thing: function(success, failure) {
+			setTimeout(success, 1000);
+		}
+	}
+}
+
 function asyncNodeError(callback) {
 	callback('test error', null);
 }
@@ -69,4 +95,22 @@ describe("node error style", {
 
 }, {
 	callbackMode: 'node'
+});
+
+describe("promise callback style", {
+
+	'promises-style addition': function() {
+		this.expect(addThingsPromise(2, 2), 4);
+	},
+
+	'promises-style failure (this should fail)': function() {
+		this.expect(failedPromise(2, 2), 4);
+	},
+
+	'promises-style timeout (this should fail)': function() {
+		this.expect(promiseTimeout(), 42);
+	}
+
+}, {
+	callbackMode: 'promises'
 });
