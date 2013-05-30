@@ -12,28 +12,37 @@
 		callbackMode: false
 	};
 
-	function outputDOM(data, options) {
+	function outputDOM(data) {
 		String.prototype.color = function(color) {
 			return '<span style="color:'+color+';font-weight:bold;">'+this+"</span>";
 		};
-		document.body.innerHTML = "<pre>"+outputConsole(data, options)+"</pre>";
+		document.body.innerHTML = "<pre>"+getOutput(data)+"</pre>";
 	}
 
 	function outputConsole(data, options) {
 
-		if (!String.prototype.color) require('string-color');
+		require('string-color');
 
-		for (var k in data.errors) {
-			console.log(k.color('red'));
-			console.log(data.errors[k].stack || data.errors[k]);
-		}
+		console.log(getOutput(data));
+
+		process.exit(data.total-data.passed);
+
+	}
+
+	function getOutput(data) {
 
 		var output = "";
+
+		for (var k in data.errors) {
+			output += k.color('red')+"\n";
+			output += (data.errors[k].stack || data.errors[k])+"\n";
+		}
+
 		if (data.passed!==data.total) output += "FAILED".color('red');
 		else output += "PASSED".color('green');
 		output += ": "+data.passed+"/"+data.total;
 
-		console.log(output);
+		return output;
 
 	}
 
@@ -164,7 +173,7 @@
 		else resultCallbacks[resultCallbacks.length] = cb;
 	}
 
-	describe.logResults = function(options) {
+	describe.logResults = function() {
 		describe.getResults(function(data) {
 			if (typeof window !== "undefined") outputDOM(data, options);
 			else outputConsole(data, options);
