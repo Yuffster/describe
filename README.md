@@ -38,7 +38,7 @@ this.expect( *subject*, *expected* )
 
 #### Example
 
-```
+```javascript
 describe("assertions", {
 	'basic synchronous expectation': function() {
 		this.expect(42, 42);
@@ -56,7 +56,7 @@ this.expect( *expected* )
 
 #### Basic Callbacks
 
-```
+```javascript
 function addNumbersAsync(a, b, callback) {
 	callback(a+b);
 }
@@ -122,7 +122,7 @@ call this.
 			total: 2,
 			results: {
 				"this test passed because its error is null": null,
-				"this test failed because there's an error": [Error]
+				"this test failed because there's an error": "Error or message"
 			}
 		}
 	}
