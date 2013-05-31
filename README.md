@@ -38,11 +38,13 @@ this.expect( *subject*, *expected* )
 
 #### Example
 
-	describe("assertions", {
-		'basic synchronous expectation': function() {
-			this.expect(42, 42);
-		}
-	});
+```
+describe("assertions", {
+	'basic synchronous expectation': function() {
+		this.expect(42, 42);
+	}
+});
+```
 
 ### Asynchronous Assertions
 
@@ -54,47 +56,53 @@ this.expect( *expected* )
 
 #### Basic Callbacks
 
-	function addNumbersAsync(a, b, callback) {
-		callback(a+b);
-	}
+```
+function addNumbersAsync(a, b, callback) {
+	callback(a+b);
+}
 
-	describe("assertions", {
-		'basic asynchronous expectation': function() {
-			addNumbersAsync(2, 2, this.expect(4));
-		}
-	});
+describe("assertions", {
+	'basic asynchronous expectation': function() {
+		addNumbersAsync(2, 2, this.expect(4));
+	}
+});
+```
 
 #### Node.js-style (e, data) Callbacks
 
-	function addNumbersAsync(a, b, callback) {
-		callback(null, a+b);
-	}
+```javascript
+function addNumbersAsync(a, b, callback) {
+	callback(null, a+b);
+}
 
-	describe("assertions", {
-		'basic asynchronous expectation': function() {
-			addNumbersAsync(2, 2, this.expect(4));
-		}
-	}, { callbackMode: 'node' });
+describe("assertions", {
+	'basic asynchronous expectation': function() {
+		addNumbersAsync(2, 2, this.expect(4));
+	}
+}, { callbackMode: 'node' });
+```
 
 #### Promises-style Callbacks
 
-	function addThingsPromise() {
-		var n = 0;
-		for (var i in arguments) n+=arguments[i];
-		return {
-			then: function(success, failure) {
-				success(n);
-			}
-		};
-	}
-
-	describe("promise callback style", {
-		'promises-style addition': function() {
-			this.expect(addThingsPromise(2, 2), 4);
+```javascript
+function addThingsPromise() {
+	var n = 0;
+	for (var i in arguments) n+=arguments[i];
+	return {
+		then: function(success, failure) {
+			success(n);
 		}
-	}, {
-		callbackMode: 'promises'
-	});
+	};
+}
+
+describe("promise callback style", {
+	'promises-style addition': function() {
+		this.expect(addThingsPromise(2, 2), 4);
+	}
+}, {
+	callbackMode: 'promises'
+});
+```
 
 ### describe.getResults
 
@@ -104,20 +112,22 @@ call this.
 
 #### Example Results
 
-	{ 
-		passed: 1,
-		total: 2,
-		results: {
-			'sample test group': {
-				passed: 1,
-				total: 2,
-				results: {
-					'this test passed because its error is null': null,
-					'this test failed because there's an error': [Error]
-				}
+```javascript
+{ 
+	passed: 1,
+	total: 2,
+	results: {
+		"sample test group": {
+			passed: 1,
+			total: 2,
+			results: {
+				"this test passed because its error is null": null,
+				"this test failed because there's an error": [Error]
 			}
 		}
 	}
+}
+```
 
 ### describe.logResults
 
@@ -130,33 +140,35 @@ test hooks.
 
 #### Example
 
-	(function() {
+```javascript
+(function() {
 
-		var arr = [], bowties;
+	var arr = [], bowties;
 
-		describe('array stuff', {
-			beforeAll: function() {
-				bowties = 'cool';
-			},
-			beforeEach: function() {
-				arr = arr.concat(1,2,3);
-			},
-			afterEach: function() {
-				arr = [];
-			},
-			afterAll: function() {
-				tests = null;
-			},
-			'bowties are cool': function() {
-				this.expect(bowties, 'cool');
-			},
-			'arrays have three things': function() {
-				this.expect(arr.length, 3);
-				arr.push(5);
-			},
-			'arrays still have three things': function() {
-				this.expect(arr.length, 3);
-			}
-		});
+	describe('array stuff', {
+		beforeAll: function() {
+			bowties = 'cool';
+		},
+		beforeEach: function() {
+			arr = arr.concat(1,2,3);
+		},
+		afterEach: function() {
+			arr = [];
+		},
+		afterAll: function() {
+			tests = null;
+		},
+		'bowties are cool': function() {
+			this.expect(bowties, 'cool');
+		},
+		'arrays have three things': function() {
+			this.expect(arr.length, 3);
+			arr.push(5);
+		},
+		'arrays still have three things': function() {
+			this.expect(arr.length, 3);
+		}
+	});
 
-	}());
+}());
+```
