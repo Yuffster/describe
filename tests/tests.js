@@ -115,6 +115,34 @@ describe("promise callback style", {
 	callbackMode: 'promises'
 });
 
+describe("custom timeout higher", {
+
+	'custom timeout': function(callback) {
+		(function(callback) {
+			setTimeout(function() {  callback(2); }, 700);
+		}(this.expect(2)));
+	}
+
+}, { timeout: 1000 });
+
+describe("custom lower timeout", {
+
+	'custom timeout failure (this should fail)': function() {
+		(function(callback) {
+			setTimeout(function() {  callback(2); }, 2);
+		}(this.expect(2)));
+	}
+
+}, { timeout: 1 });
+
+describe("expections", {
+
+	"pending expectation fails (this should fail)": function() {
+		
+	}
+
+}, { timeout: 1 });
+
 (function() {
 
 	var arr = [], bowties;
