@@ -143,6 +143,18 @@ describe("expections", {
 
 }, { timeout: 1 });
 
+
+describe("describe options", {
+
+	"should revert to default timeout of 500ms": function() {
+		(function(callback) {
+			setTimeout(function() {  callback(2); }, 400);
+		}(this.expect(2)));
+	}
+
+});
+
+
 (function() {
 
 	var arr = [], bowties;

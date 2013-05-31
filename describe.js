@@ -97,8 +97,9 @@
 	}
 
 	function Group(name, tests, config) {
-		this.options = options;
-		for (var k in config) this.options[k] = config[k];
+		this.options = {};
+		for (var k in options) this.options[k] = options[k];
+		for (k in config) this.options[k] = config[k];
 		this.tests = tests;
 	}
 
