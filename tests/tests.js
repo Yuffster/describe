@@ -141,7 +141,7 @@ describe("expections", {
 		
 	}
 
-}, { timeout: 1 });
+});
 
 
 describe("describe options", {
