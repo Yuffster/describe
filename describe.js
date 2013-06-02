@@ -65,26 +65,39 @@
 				expect(response, expected, callback);
 			};
 		}  else {
-			if (subject==expected) callback(null);
+			if (subject&&subject.message) callback(subject);
+			else if (subject==expected||options.getError) callback(null);
 			else callback(new Error("Expected "+expected+" but got "+subject));
 		}
 	}
 
 	function runTest(fun, callback, options) {
 
-		var done, timer;
+		var done, timer, errorExpected;
 
 		function respond(e) {
 			if (done) return;
 			done = true;
-			clearTimeout(timer);
+			if (errorExpected) {
+				if (e && errorExpected == (e.message || e)) {
+					e = null;
+				} else {
+					e = new Error("Expected error '"+errorExpected+"' but got "+e);
+				}
+			}
 			callback(e);
+			clearTimeout(timer);
 		}
 
 		try {
 			fun.call({
 				expect: function(a,b) {
 					return expect(a,b,respond,options);
+				},
+				expectError: function(a,b) {
+					options.getError = true;
+					errorExpected = b || a;
+					return expect(a, b, respond, options);
 				}
 			});
 		} catch (e) {

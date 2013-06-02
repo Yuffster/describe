@@ -34,8 +34,20 @@ function failedPromise() {
 	};
 }
 
+function failedPromiseString() {
+	return {
+		then: function(success, failure) {
+			failure("expected error");
+		}
+	};
+}
+
 function throwError() {
 	throw new Error("expected error");
+}
+
+function throwString() {
+	throw "expected error";
 }
 
 function promiseTimeout() {
@@ -48,6 +60,18 @@ function promiseTimeout() {
 
 function asyncNodeData(callback) {
 	callback(null, 'data');
+}
+
+function asyncNodeError(cb) {
+	cb(new Error("expected error"));
+}
+
+function asyncNodeErrorString(cb) {
+	cb("expected error");
+}
+
+function asyncError(cb) {
+	cb(new Error("expected error"));
 }
 
 describe("synchronous operations", {
@@ -143,7 +167,6 @@ describe("expections", {
 
 });
 
-
 describe("describe options", {
 
 	"should revert to default timeout of 500ms": function() {
@@ -153,7 +176,6 @@ describe("describe options", {
 	}
 
 });
-
 
 (function() {
 
@@ -191,3 +213,51 @@ describe("describe options", {
 	});
 
 }());
+
+
+describe('error expectations, standard', {
+
+	"expected error object, asynchronous": function() {
+
+		asyncError(this.expectError("expected error"));
+
+	}
+
+});
+
+describe('error expectations, Node.js', {
+
+	"expected error string": function() {
+
+		asyncNodeError(this.expectError("expected error"));
+
+	},
+
+	"expected error message": function() {
+
+		asyncNodeErrorString(this.expectError("expected error"));
+
+	}
+
+}, {callbackMode: 'node'});
+
+describe('error expectations, Promises', {
+
+	"expected error string, synchronous": function() {
+		this.expectError(failedPromiseString(), "expected error");
+	},
+
+	"expected error object": function() {
+		this.expectError(failedPromise(), "expected error");
+	},
+
+	"wrong error string returned (this should fail)": function() {
+		this.expectError(failedPromiseString(), "expected error");
+	},
+
+
+	"wrong error object returned (this should fail)": function() {
+		this.expectError(failedPromise(), "out of cheese");
+	}
+
+}, {callbackMode: 'promises'});
