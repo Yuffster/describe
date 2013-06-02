@@ -72,26 +72,29 @@
 
 	function runTest(fun, callback, options) {
 
-		var done = false, timer;
+		var done, timer;
+
+		function respond(e) {
+			if (done) return;
+			done = true;
+			clearTimeout(timer);
+			callback(e);
+		}
 
 		try {
 			fun.call({
 				expect: function(a,b) {
-					return expect(a,b,callback,options);
+					return expect(a,b,respond,options);
 				}
 			});
 		} catch (e) {
-			if (done) return;
-			done = true;
-			callback(e);
+			respond(e);
 			clearTimeout(timer);
 		}
 
 		var error = new Error("Test timeout after "+options.timeout+"ms");
 		timer = setTimeout(function() {
-			if (done) return;
-			callback(error);
-			done = true;
+			respond(error);
 		}, options.timeout);
 
 	}
@@ -149,25 +152,27 @@
 
 	};
 
-	var results = {}, pendingGroups = 0, resultCallbacks = [], errors = {},
-	    total = 0, passed = 0;
+	var results = {}, pendingGroups = 0, resultCallbacks = [];
+
+	results.total   = 0;
+	results.passed  = 0;
+	results.errors  = {};
+	results.results = {};
 
 	function describe(name, tests, config) {
 		pendingGroups++;
 		new Group(name, tests, config).execute(function(data) {
-			results[name] = data;
-			total  += data.total;
-			passed += data.passed;
-			for (var k in data.errors) errors[name+'#'+k] = data.errors[k];
+			results.results[name] = data;
+			results.total  += data.total;
+			results.passed += data.passed;
+			for (var k in data.errors) {
+				results.errors[name+'#'+k] = data.errors[k];
+			}
 			pendingGroups--;
 			if (pendingGroups===0) {
-				result = {
-					total: total, passed: passed, results: results, 
-					errors: errors
-				};
 				var next = resultCallbacks.shift();
 				while (next) {
-					next(result);
+					next(results);
 					next = resultCallbacks.shift();
 				}
 			}
