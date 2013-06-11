@@ -48,6 +48,7 @@
 	}
 
 	function expect(subject, expected, callback, options) {
+		options = options || {};
 		if (subject && subject.then && options.callbackMode == "promises") {
 			subject.then(function(data) {
 				expect(data, expected, callback, options);
@@ -62,7 +63,7 @@
 						return callback(response);
 					} else response = data;
 				}
-				expect(response, expected, callback);
+				expect(response, expected, callback, options);
 			};
 		}  else {
 			if (subject&&subject.message) callback(subject);
@@ -79,7 +80,8 @@
 			if (done) return;
 			done = true;
 			if (errorExpected) {
-				if (e && errorExpected == (e.message || e)) {
+				e = e.message || e;
+				if (e && errorExpected == e) {
 					e = null;
 				} else {
 					e = new Error("Expected error '"+errorExpected+"' but got "+e);
@@ -92,7 +94,7 @@
 		try {
 			fun.call({
 				expect: function(a,b) {
-					return expect(a,b,respond,options);
+					return expect(a,b,respond,{});
 				},
 				expectError: function(a,b) {
 					options.getError = true;
