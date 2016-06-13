@@ -94,7 +94,7 @@
 		try {
 			fun.call({
 				expect: function(a,b) {
-					return expect(a,b,respond,{});
+					return expect(a, b, respond, options);
 				},
 				expectError: function(a,b) {
 					options.getError = true;
