@@ -14,5 +14,8 @@
 		"url":  "http://msteigerwalt.com"
 	},
 	"homepage": "http://github.com/yuffster/describe",
-	"main": "describe.js"
+	"main": "describe.js",
+	"scripts": {
+		"test": "node tests/run_tests.js"
+	}
 }

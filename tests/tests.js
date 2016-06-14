@@ -252,7 +252,7 @@ describe('error expectations, Promises', {
 	},
 
 	"wrong error string returned (this should fail)": function() {
-		this.expectError(failedPromiseString(), "expected error");
+		this.expectError(failedPromiseString(), "out of cheese");
 	},
 
 
