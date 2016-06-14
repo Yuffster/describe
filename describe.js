@@ -1,4 +1,4 @@
-(function(scope) {
+(function describeFactory(scope, returnInstance) {
 
 	var isModule = false;
 
@@ -41,7 +41,7 @@
 
 		if (data.passed!==data.total) output += "FAILED".color('red');
 		else output += "PASSED".color('green');
-		output += ": "+data.passed+"/"+data.total;
+		output += ": "+data.passed+" passed / "+data.total+" tests";
 
 		return output;
 
@@ -210,6 +210,15 @@
 			else outputConsole(data, options);
 		});
 	};
+
+	// allow to make other describe instances
+	describe.factory = function() {
+		return describeFactory(null, true);
+	};
+
+	if (returnInstance) {
+		return describe;
+	}
 
 	if (isModule) module.exports = describe;
 	else scope.describe = describe;
