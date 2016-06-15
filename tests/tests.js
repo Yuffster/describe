@@ -75,7 +75,7 @@ function asyncError(cb) {
 }
 
 function expectTest(test, cb, options) {
-	var describe2 = describe.factory();
+	var describe2 = describe.new();
 	describe2('test', { 'test': test }, options)
 	describe2.getResults(cb);
 };

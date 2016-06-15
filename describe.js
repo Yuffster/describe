@@ -1,4 +1,4 @@
-(function describeFactory(scope, returnInstance) {
+(function initialize(scope) {
 
 	var isModule = false;
 
@@ -212,11 +212,11 @@
 	};
 
 	// allow to make other describe instances
-	describe.factory = function() {
-		return describeFactory(null, true);
+	describe.new = function() {
+		return initialize();
 	};
 
-	if (returnInstance) {
+	if (!scope) {
 		return describe;
 	}
 
