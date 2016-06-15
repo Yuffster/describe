@@ -133,6 +133,10 @@ call this.
 
 Gets the results and outputs them either to the DOM or the console.
 
+### describe.new
+
+Create a new independant instance of `describe`.
+
 ### Test Hooks
 
 Each test group supports beforeEach, afterEach, beforeAll, and afterAll as
